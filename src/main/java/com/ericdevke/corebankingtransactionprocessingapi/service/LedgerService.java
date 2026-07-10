@@ -4,11 +4,16 @@ import com.ericdevke.corebankingtransactionprocessingapi.entity.Account;
 import com.ericdevke.corebankingtransactionprocessingapi.entity.Transaction;
 import com.ericdevke.corebankingtransactionprocessingapi.entity.TransactionStatus;
 import com.ericdevke.corebankingtransactionprocessingapi.entity.TransactionType;
+import com.ericdevke.corebankingtransactionprocessingapi.exception.InsufficientFundsException;
+import com.ericdevke.corebankingtransactionprocessingapi.exception.ResourceNotFoundException;
 import com.ericdevke.corebankingtransactionprocessingapi.repository.AccountRepository;
 import com.ericdevke.corebankingtransactionprocessingapi.repository.TransactionRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.naming.InsufficientResourcesException;
 import java.math.BigDecimal;
 
 @Service
@@ -21,7 +26,7 @@ public class LedgerService {
         this.transactionRepository = transactionRepository;
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Transaction deposit(long accountId, BigDecimal amount){
         validateAmount(amount);
 
@@ -34,14 +39,14 @@ public class LedgerService {
         return transactionRepository.save(transaction);
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Transaction withdraw(long accountId, BigDecimal amount){
         validateAmount(amount);
 
         Account account = getAccountForUpdateOrThrow(accountId);
 
         if(account.getBalance().compareTo(amount) < 0){
-            throw new IllegalStateException("Insufficient funds in account "+ account.getAccountNumber());
+            throw new InsufficientFundsException("Insufficient funds in account "+ account.getAccountNumber());
         }
 
         account.setBalance(account.getBalance().subtract(amount));
@@ -52,7 +57,7 @@ public class LedgerService {
         return transactionRepository.save(transaction);
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Transaction transfer(Long fromAccountId, long toAccountId, BigDecimal amount){
         validateAmount(amount);
 
@@ -84,7 +89,7 @@ public class LedgerService {
 
     private Account getAccountForUpdateOrThrow(long accountId){
         return accountRepository.findByIdForUpdate(accountId)
-                .orElseThrow( () -> new IllegalArgumentException("Account not found with id: "+ accountId));
+                .orElseThrow( () -> new ResourceNotFoundException("Account not found with id: "+ accountId));
     }
 
     private void validateAmount(BigDecimal amount) {

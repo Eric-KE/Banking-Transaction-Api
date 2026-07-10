@@ -3,6 +3,7 @@ package com.ericdevke.corebankingtransactionprocessingapi.service;
 import com.ericdevke.corebankingtransactionprocessingapi.entity.Account;
 import com.ericdevke.corebankingtransactionprocessingapi.entity.Currency;
 import com.ericdevke.corebankingtransactionprocessingapi.entity.User;
+import com.ericdevke.corebankingtransactionprocessingapi.exception.ResourceNotFoundException;
 import com.ericdevke.corebankingtransactionprocessingapi.repository.AccountRepository;
 import com.ericdevke.corebankingtransactionprocessingapi.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class AccountService {
     public Account openAccount(Long userId, Currency currency) {
         User user = userRepository.findById(userId)
                 .orElseThrow(
-                        () -> new IllegalArgumentException("User not found with id: "+ userId)
+                        () -> new ResourceNotFoundException("User not found with id: "+ userId)
                 );
 
         List<Account> existingAccounts = accountRepository.findByUserId(userId);
