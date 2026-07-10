@@ -1,5 +1,6 @@
 package com.ericdevke.corebankingtransactionprocessingapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -54,7 +55,7 @@ public class User {
     }
 
     public String getEmail() {
-        return customerNumber;
+        return email;
     }
 
     public void setEmail(String email){
@@ -69,6 +70,8 @@ public class User {
         this.createdAt = createdAt;
     }
 
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<Account> getAccounts() {
         return accounts;
     }

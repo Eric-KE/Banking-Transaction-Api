@@ -1,5 +1,6 @@
 package com.ericdevke.corebankingtransactionprocessingapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -84,6 +85,9 @@ public class Account {
         this.createdAt = createdAt;
     }
 
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     public User getUser() {
         return user;
     }
