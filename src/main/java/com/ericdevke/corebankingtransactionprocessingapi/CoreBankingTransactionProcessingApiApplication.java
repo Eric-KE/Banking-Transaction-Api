@@ -23,23 +23,35 @@ public class CoreBankingTransactionProcessingApiApplication {
     @Bean
     public CommandLineRunner testRun(UserService userService, AccountService accountService, LedgerService ledgerService) {
         return args -> {
-            User user1 = userService.registerUser("Bernard Ngugi", "bernardngugi@gmail.com");
-            Account account1 = accountService.openAccount(user1.getId(), Currency.USD);
-            System.out.println("User1 Account: " + account1.getAccountNumber() + "| Balance: " + account1.getBalance());
+            User user = userService.registerUser("Alice Munene", "alicemunene@gmail.com");
+            Account account = accountService.openAccount(user.getId(), Currency.USD);
+            ledgerService.deposit(account.getId(), new BigDecimal("1000.00"));
 
-            User user2 = userService.registerUser("Nancy Nyambura", "nancynyambura@gmail.com");
-            Account account2 = accountService.openAccount(user2.getId(), Currency.USD);
-            System.out.println("User2 Account: " + account2.getAccountNumber() + "| Balance: " + account2.getBalance());
+            System.out.println("Starting Balance: " +
+                    accountService.getAccountsForUser(user.getId()).get(0).getBalance());
 
-            ledgerService.deposit(account1.getId(), new BigDecimal("1000.00"));
-            System.out.println("After deposit, account balance: " + accountService.getAccountsForUser(user1.getId()).get(0).getBalance());
+            long accountId = account.getId();
 
-            ledgerService.withdraw(account1.getId(), new BigDecimal("200.00"));
-            System.out.println("After withdrawal, account1 balance: " + accountService.getAccountsForUser(user1.getId()).get(0).getBalance());
+            Runnable withdrawTask = () -> {
+                try{
+                    ledgerService.withdraw(accountId, new BigDecimal("800.00"));
+                    System.out.println(Thread.currentThread().getName() + "Withdrawal Succeeded");
+                } catch (Exception e) {
+                    System.out.println(Thread.currentThread().getName() + "Withdrawal Failed - "+ e.getMessage());
+                }
+            };
 
-            ledgerService.transfer(account1.getId(), account2.getId(), new BigDecimal("150.00"));
-            System.out.println("After transfer, account1 balance: " + accountService.getAccountsForUser(user1.getId()).get(0).getBalance());
-            System.out.println("After transfer, account2 balance: " + accountService.getAccountsForUser(user2.getId()).get(0).getBalance());
+            Thread threadA = new Thread(withdrawTask, "Thread-A");
+            Thread threadB = new Thread(withdrawTask, "Thread-B");
+
+            threadA.start();
+            threadB.start();
+
+            threadA.join();
+            threadB.join();
+
+            BigDecimal finalBalance = accountService.getAccountsForUser(user.getId()).get(0).getBalance();
+            System.out.println("Final balance: "+ finalBalance);
         };
 
     }
