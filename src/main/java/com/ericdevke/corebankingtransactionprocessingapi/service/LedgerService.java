@@ -25,7 +25,7 @@ public class LedgerService {
     public Transaction deposit(long accountId, BigDecimal amount){
         validateAmount(amount);
 
-        Account account = getAccountOrThrow(accountId);
+        Account account = getAccountForUpdateOrThrow(accountId);
         account.setBalance(account.getBalance().add(amount));
         accountRepository.save(account);
 
@@ -38,7 +38,7 @@ public class LedgerService {
     public Transaction withdraw(long accountId, BigDecimal amount){
         validateAmount(amount);
 
-        Account account = getAccountOrThrow(accountId);
+        Account account = getAccountForUpdateOrThrow(accountId);
 
         if(account.getBalance().compareTo(amount) < 0){
             throw new IllegalStateException("Insufficient funds in account "+ account.getAccountNumber());
@@ -60,8 +60,8 @@ public class LedgerService {
             throw new IllegalStateException("Cannot transfer to the same account");
         }
 
-        Account fromAccount = getAccountOrThrow(fromAccountId);
-        Account toAccount = getAccountOrThrow(toAccountId);
+        Account fromAccount = getAccountForUpdateOrThrow(fromAccountId);
+        Account toAccount = getAccountForUpdateOrThrow(toAccountId);
 
         if(fromAccount.getCurrency() != toAccount.getCurrency()){
             throw new IllegalStateException("Cannot transfer between accounts of different currencies");
@@ -82,9 +82,9 @@ public class LedgerService {
         return transactionRepository.save(transaction);
     }
 
-    private Account getAccountOrThrow(long accountId){
-        return accountRepository.findById(accountId)
-                .orElseThrow(() -> new IllegalArgumentException("Account not found with id: "+ accountId));
+    private Account getAccountForUpdateOrThrow(long accountId){
+        return accountRepository.findByIdForUpdate(accountId)
+                .orElseThrow( () -> new IllegalArgumentException("Account not found with id: "+ accountId));
     }
 
     private void validateAmount(BigDecimal amount) {
