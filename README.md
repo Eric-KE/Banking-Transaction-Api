@@ -21,10 +21,15 @@ Java, Spring Boot, Spring Data JPA, PostgreSQL, Flyway, Maven
 
 ## Architecture Highlights
 **Concurrency & Data Intergrity**
+
 Pessimistic write locks (`SELECT ... FROM UPDATE`) combine with `REPEATABLE_READ` isolation prevent race conditions on account balances. Verified with a Multi-threaded test simulating simultaneous withdrawals on the same account.
+
 **Error Handling**
+
 A global `@RestControllerAdvice` handler catches domian specific exceptiions(`ResourceNotFoundException`, `InsufficientFundsException`, `DuplicateResourceException`) and validation failures, returning consistent JSON error responses with appropriate HTTP status codes and logging every failure automatically.
+
 **Schema Management**
+
 Flyway manages all schema changes as version controlled SQL migration files, ensuring local and staging environements stay in sync rather than relying on ORM auto generation.
 
 ##Getting Started
