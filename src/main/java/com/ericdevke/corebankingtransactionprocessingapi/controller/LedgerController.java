@@ -2,6 +2,9 @@ package com.ericdevke.corebankingtransactionprocessingapi.controller;
 
 import com.ericdevke.corebankingtransactionprocessingapi.entity.Transaction;
 import com.ericdevke.corebankingtransactionprocessingapi.service.LedgerService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,21 +22,42 @@ public class LedgerController {
     }
 
     @PostMapping("/deposit")
-    public Transaction deposit(@RequestBody DepositRequest request){
+    public Transaction deposit(@Valid @RequestBody DepositRequest request){
         return ledgerService.deposit(request.accountId(), request.amount());
     }
 
     @PostMapping("/withdraw")
-    public Transaction withdraw(@RequestBody WithdrawRequest request) {
+    public Transaction withdraw(@Valid @RequestBody WithdrawRequest request) {
         return ledgerService.withdraw(request.accountId(), request.amount());
     }
 
     @PostMapping("/transfer")
-    public Transaction transfer(@RequestBody TransferRequest request){
+    public Transaction transfer(@Valid @RequestBody TransferRequest request){
         return ledgerService.transfer(request.fromAccountId(), request.toAccountId(), request.amount());
     }
 
-    public record DepositRequest(long accountId, BigDecimal amount) {}
-    public record WithdrawRequest(long accountId, BigDecimal amount) {}
-    public record TransferRequest(long fromAccountId, long toAccountId, BigDecimal amount) {}
+    public record DepositRequest(
+            @NotNull(message = "accountId is required")
+            long accountId,
+
+            @NotNull(message = "amount is required")
+            @Positive(message = "Amount must be greater than zero")
+            BigDecimal amount) {}
+    public record WithdrawRequest(
+            @NotNull(message = "accountId is required")
+            long accountId,
+
+            @NotNull(message = "amount is required")
+            @Positive(message = "amount must be greater than zero")
+            BigDecimal amount) {}
+    public record TransferRequest(
+            @NotNull(message = "fromAccountId is required")
+            long fromAccountId,
+
+            @NotNull(message = "toAccountId is required")
+            long toAccountId,
+
+            @NotNull(message = "amount is required")
+            @Positive(message = "amount must be greater than zero")
+            BigDecimal amount) {}
 }
