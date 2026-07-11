@@ -42,6 +42,7 @@ Flyway manages all schema changes as version controlled SQL migration files, ens
 -PostgreSQL 14+ installed and running
 
 ###Setup
+
 1.** Clone the repo**
 ```bash
 git clone https://github.com/Eric-KE/Banking-Transaction-Api.git
@@ -99,9 +100,9 @@ GET
 
 ## Database Schema
 
--**users** - id, full_name, email, customer_number, created_at
+**users** - id, full_name, email, customer_number, created_at
 
--**accounts** - id, account_number, currency, balance, user_id(FK), created_at
+**accounts** - id, account_number, currency, balance, user_id(FK), created_at
 
 **transactions** - id, type, amount, status, source_account_id (FK), destination_account_id (Fk), created_at, failure_reason
 
