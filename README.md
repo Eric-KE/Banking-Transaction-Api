@@ -3,12 +3,18 @@ A high-performance backend system built with Spring Boot for managing User accou
 
 ## Features
 -User registration with auto-generated customer numbers.
--Multi-currency account support (KES, USD, GBP, EUR)
--Bank style account number generation(branch + product + customer code)
--Deposits, withdrawals and transfers with full balance validation
+
+-Multi-currency account support (KES, USD, GBP, EUR).
+
+-Bank style account number generation(branch + product + customer code).
+
+-Deposits, withdrawals and transfers with full balance validation.
+
 -Pessimistic locking and configurable transaction isolation levels to prevent race condition.
--centralized exception handling with structured, logged error responses
--Automated, version-controlled database schema migrations via Flyway
+
+-centralized exception handling with structured, logged error responses.
+
+-Automated, version-controlled database schema migrations via Flyway.
 
 ## Tech Stack
 Java, Spring Boot, Spring Data JPA, PostgreSQL, Flyway, Maven
@@ -82,14 +88,17 @@ GET
 
 ##Future Enhancements
 
--Multi-currency transfers with live exchange rate conversion via an external API
+-Multi-currency transfers with live exchange rate conversion via an external API.
 
--Multi-branch account support
+-Multi-branch account support.
 
--Authentication and authorization (JWT-based)
--Pagination for list endpoints
--Automated integration test suite
--Connection with a frontend
+-Authentication and authorization (JWT-based).
+
+-Pagination for list endpoints.
+
+-Automated integration test suite.
+
+-Connection with a frontend.
 
 ## Lincense
 This project is for educational purposes
