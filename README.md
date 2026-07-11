@@ -75,11 +75,13 @@ GET
 `/api/v1/ledger/transactions/{accountId}` - View transaction history for an account
 
 ## Database Schema
+
 -**users** - id, full_name, email, customer_number, created_at
 -**accounts** - id, account_number, currency, balance, user_id(FK), created_at
 **transactions** - id, type, amount, status, source_account_id (FK), destination_account_id (Fk), created_at, failure_reason
 
 ##Future Enhancements
+
 -Multi-currency transfers with live exchange rate conversion via an external API
 -Multi-branch account support
 -Authentication and authorization (JWT-based)
