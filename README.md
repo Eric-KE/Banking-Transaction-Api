@@ -61,29 +61,40 @@ spring.datasource.url=jdbc:postgresql://localhost:5432/ledger_db
 ## API Endpoints
 Post
 `api/v1/users` - Register a new username
+
 GET
 `/api/v1/users` - List all users
+
 GET
 `/api/v1/user/{id}` - Get a user by ID
+
 POST
 `/api/v1/accounts` - Open a new currency account
+
 GET
 `/api/v1/accounts/{id}` - Get an account by ID
+
 GET
 `/api/v1/accounts/user/{userId}` - List all accounts for a user
+
 POST
 `/api/v1/ledger/deposit`  -Deposit funds into an account
+
 POST
 `/api/v1/ledger/withdraw` - Withdrawal funds from an account
+
 POST
 `/api/v1/ledger/transfer` - Transfer funds between accounts
+
 GET
 `/api/v1/ledger/transactions/{accountId}` - View transaction history for an account
 
 ## Database Schema
 
 -**users** - id, full_name, email, customer_number, created_at
+
 -**accounts** - id, account_number, currency, balance, user_id(FK), created_at
+
 **transactions** - id, type, amount, status, source_account_id (FK), destination_account_id (Fk), created_at, failure_reason
 
 ##Future Enhancements
