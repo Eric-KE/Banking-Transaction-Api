@@ -42,6 +42,11 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
+    public Account getAccountById(long id) {
+        return accountRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Account not found with id: "+ id));
+    }
+
     public List<Account> getAccountsForUser(Long userId) {
         return accountRepository.findByUserId(userId);
     }

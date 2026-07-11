@@ -5,12 +5,10 @@ import com.ericdevke.corebankingtransactionprocessingapi.service.LedgerService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/ledger")
@@ -34,6 +32,11 @@ public class LedgerController {
     @PostMapping("/transfer")
     public Transaction transfer(@Valid @RequestBody TransferRequest request){
         return ledgerService.transfer(request.fromAccountId(), request.toAccountId(), request.amount());
+    }
+
+    @GetMapping("/transactions/{accountId}")
+    public List<Transaction> getTransactionsForAccount(@PathVariable long accountId){
+        return LedgerService.getTransactionsForAccount(accountId);
     }
 
     public record DepositRequest(

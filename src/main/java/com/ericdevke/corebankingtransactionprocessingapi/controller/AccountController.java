@@ -29,6 +29,11 @@ public class AccountController {
         return accountService.getAccountsForUser(userId);
     }
 
+    @GetMapping("/{id}")
+    public Account getAccountById(@PathVariable long id){
+        return accountService.getAccountById(id);
+    }
+
     public record OpenAccountRequest(
             @NotNull(message = "UserId is required")
             long userId,

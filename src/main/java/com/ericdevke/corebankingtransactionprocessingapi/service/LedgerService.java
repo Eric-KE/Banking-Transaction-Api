@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.naming.InsufficientResourcesException;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class LedgerService {
@@ -85,6 +86,10 @@ public class LedgerService {
         Transaction transaction = new Transaction(TransactionType.TRANSFER, amount, fromAccount, toAccount);
         transaction.setStatus(TransactionStatus.SUCCESS);
         return transactionRepository.save(transaction);
+    }
+
+    public List<Transaction> getTransactionsForAccount(long accountId){
+        return transactionRepository.findBySourceAccountId(accountId);
     }
 
     private Account getAccountForUpdateOrThrow(long accountId){
