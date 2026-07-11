@@ -83,7 +83,9 @@ GET
 ##Future Enhancements
 
 -Multi-currency transfers with live exchange rate conversion via an external API
+
 -Multi-branch account support
+
 -Authentication and authorization (JWT-based)
 -Pagination for list endpoints
 -Automated integration test suite
