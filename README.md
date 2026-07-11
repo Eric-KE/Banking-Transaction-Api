@@ -34,8 +34,11 @@ Flyway manages all schema changes as version controlled SQL migration files, ens
 
 ##Getting Started
 ### Prerequisites
+
 -Java 25 (or your installed JDK version)
+
 -maven (or use the included './mvnw' wrapper)
+
 -PostgreSQL 14+ installed and running
 
 ###Setup
