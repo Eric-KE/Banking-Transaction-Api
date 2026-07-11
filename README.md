@@ -59,8 +59,8 @@ cd Banking-Transaction-Api
 Edit `src/main/resources/appication.properties`:
 ```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/ledger_db
-   spring.datasource.username=ledger_user
-   spring.datasource.password=yourpassword
+spring.datasource.username=ledger_user
+spring.datasource.password=yourpassword
 ```
 4.**Run the appication**
 ```bash
